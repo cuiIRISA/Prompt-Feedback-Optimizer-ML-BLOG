@@ -4,9 +4,7 @@
 
 Modern chatbots in production face increasingly complex challenges. Beyond handling basic FAQs, they must now execute meaningful actions, adhere to company policies, implement content filtering, escalate to human operators when needed, and manage follow-up tasks. These requirements demand sophisticated systems capable of handling diverse scenarios while maintaining consistency and compliance.
 
-To address these challenges, a modular subsystem architecture proves invaluable. This approach allows for flexible integration of different processing logics, such as intelligent routing between knowledge bases, dynamic prioritization of information sources, and seamless incorporation of business rules and policies. Each subsystem can be independently developed and optimized for specific tasks while maintaining overall system coherence.
-
-As chatbot systems grow in complexity with multiple subsystems handling various workloads, the importance of prompt engineering becomes increasingly evident. Crafting effective prompts that work across different subsystems while maintaining consistency and accuracy is both critical and time-intensive. This challenge is particularly acute in enterprise environments where precision and reliability are paramount.
+To address these challenges, a modular subsystem architecture proves invaluable. This approach allows for flexible integration of different processing logics, such as intelligent routing between knowledge bases, dynamic prioritization of information sources, and seamless incorporation of business rules and policies. Each subsystem can be independently developed and optimized for specific tasks while maintaining overall system coherence. Indeed, as chatbot systems grow in complexity with multiple subsystems handling various workloads, the importance of prompt engineering becomes increasingly evident. Crafting effective prompts that work across different subsystems while maintaining consistency and accuracy is both critical and time-intensive. This challenge is particularly acute in enterprise environments where precision and reliability are paramount.
 
 In this blog post, we'll explore how we've leveraged user and system feedback to continuously improve and optimize our instruction prompts. This feedback-driven approach has enabled us to create more effective prompts that adapt to various subsystems while maintaining high performance across different use cases.
 
@@ -54,11 +52,27 @@ Using the structured feedback from the reasoning framework, we implement targete
 The optimization process concludes each iteration by testing the refined prompt against the evaluation dataset. We measure performance improvements through comparative analysis of key metrics and conduct quality assessments of new outputs. This phase initiates the next iteration cycle, where successful changes are incorporated into the baseline, and newly identified challenges inform the next round of optimization. This creates a sustainable improvement loop that progressively enhances prompt effectiveness while maintaining detailed documentation of successful strategies.
 
 
+Our proposed solution leverages two foundation models through Amazon Bedrock: Amazon Nova for executing instructional tasks, optimizing the instruction prompt,  and DeepSeek-R1 for error analysis and feedback generation. Amazon Bedrock, a fully managed service, provides access to high-performance foundation models from leading AI companies, enabling flexible model selection and testing. The implementation is available on GitHub, allowing you to adapt the solution to your specific needs.
 
 
+Here is the initial task instruction and feedback instruction template that forms the foundation of our evaluation framework.
+
+[add here the initial task instuction]
 
 
+During the iteration process, we observed various types of feedback patterns, which guided systematic improvements in our prompt engineering approach.
 
+
+[add here the feedback]
+
+
+We conducted a comparative analysis between the initial and final prompts. 
+
+
+[add here the final improved task instruction]
+
+
+Through multiple iterations and the incorporation of detailed task-specific instructions, we evaluated the performance on a particularly challenging test case. The results demonstrated a 30% improvement in task effectiveness, validating our iterative optimization strategy.
 
 
 
