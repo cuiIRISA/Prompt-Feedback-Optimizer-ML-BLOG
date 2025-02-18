@@ -1,6 +1,6 @@
 ## Optimizing Enterprise Chatbots: How Crypto.com Leverages LLM Reasoning and Feedbacks for Enhanced Efficiency
 
-This post is co-written with Jessie from Crypto.com. Crypto.com is a crypto exchange and comprehensive trading platform serving 100 million users in 90 countries. To improve the service quality of Crypto.com, the firm implemented generative artificial intelligence (AI)-powered chatbot services on AWS.
+*This post is co-written with Jessie from Crypto.com. Crypto.com is a crypto exchange and comprehensive trading platform serving 100 million users in 90 countries. To improve the service quality of Crypto.com, the firm implemented generative artificial intelligence (AI)-powered chatbot services on AWS.*
 
 Modern chatbots in production face increasingly complex challenges. Beyond handling basic FAQs, they must now execute meaningful actions, adhere to company policies, implement content filtering, escalate to human operators when needed, and manage follow-up tasks. These requirements demand sophisticated systems capable of handling diverse scenarios while maintaining consistency and compliance.
 
