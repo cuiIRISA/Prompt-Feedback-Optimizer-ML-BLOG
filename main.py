@@ -1,6 +1,5 @@
 import json
 import os
-import copy
 import argparse
 import traceback
 from datetime import datetime

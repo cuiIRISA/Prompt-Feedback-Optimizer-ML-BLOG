@@ -1,4 +1,3 @@
-# src/testing/executor.py
 import json
 import boto3
 import traceback
