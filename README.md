@@ -107,7 +107,7 @@ The framework demonstrates consistent performance improvements through iterative
 | 4         | 92% (+8%)    | Introduced verification failure scenarios and time-sensitive criteria |
 | 5         | 100% (+8%)   | Finalized fraud evidence definitions and output format requirements |
 
-You can see the [full iteration logs](./iteration_log.md) for detailed progress tracking.
+You can see the [full iteration logs](./iteration_log) for detailed progress tracking.
 
 ## Use Cases
 
