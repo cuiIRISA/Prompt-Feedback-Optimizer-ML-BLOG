@@ -5,6 +5,7 @@ import os
 from datetime import datetime
 from tqdm import tqdm
 from string import Template
+import concurrent.futures
 
 from src.utils.parsers import load_json_from_llm_result
 from src.utils.evaluation import evaluate_test_results 
@@ -82,14 +83,15 @@ def process_single_test_case(test_case, prompt_template, target_model_id, case_i
     return case_result
 
 
-def execute_test_cases(data, target_model_id, output_file=None):
+def execute_test_cases(data, target_model_id, output_file=None, max_workers=8):
     """
-    Execute all test cases and track results
+    Execute all test cases in parallel and track results
     
     Args:
         data (dict): Data containing prompt template and test cases
         target_model_id (str): Model ID to use for inference
         output_file (str, optional): Path to save results. If None, results aren't saved.
+        max_workers (int): Maximum number of parallel workers to use
         
     Returns:
         dict: Results of all test cases with statistics
@@ -102,35 +104,62 @@ def execute_test_cases(data, target_model_id, output_file=None):
     suite_results = {
         "prompt_template": prompt_template,
         "test_cases": [],
-        "stats": {"total": total_cases, "llm_successful": 0, "llm_fail": 0,"task_succeed": 0},
+        "stats": {"total": total_cases, "llm_successful": 0, "llm_fail": 0, "task_succeed": 0},
     }
 
-    # Set up progress bar
+    # Create a list to store completed results that might come back in any order
+    completed_results = [None] * total_cases
+    
+    # Process test cases in parallel
     with tqdm(total=total_cases, desc="Processing Test Cases") as pbar:
-        # Process each test case
-        for case_idx, test_case in enumerate(test_cases):
-            # Process the test case
-            case_result = process_single_test_case(
-                test_case,
-                prompt_template,
-                target_model_id,
-                case_idx,
-            )
-
-            # Add case result to results
-            suite_results["test_cases"].append(case_result)
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+            # Submit all tasks to the executor
+            future_to_idx = {
+                executor.submit(
+                    process_single_test_case,
+                    test_case,
+                    prompt_template,
+                    target_model_id,
+                    case_idx,
+                ): case_idx
+                for case_idx, test_case in enumerate(test_cases)
+            }
             
-            # Update statistics
-            if case_result["case_type"] == "llm_success":
-                suite_results["stats"]["llm_successful"] += 1
-            else:
-                suite_results["stats"]["llm_fail"] += 1
-
-            # Update progress bar
-            pbar.update(1)
-            pbar.set_postfix({
-                "Success": f"{suite_results['stats']['llm_successful']}/{total_cases}",
-            })
+            # Process results as they complete
+            for future in concurrent.futures.as_completed(future_to_idx):
+                case_idx = future_to_idx[future]
+                try:
+                    case_result = future.result()
+                    completed_results[case_idx] = case_result
+                    
+                    # Update statistics
+                    if case_result["case_type"] == "llm_success":
+                        suite_results["stats"]["llm_successful"] += 1
+                    else:
+                        suite_results["stats"]["llm_fail"] += 1
+                    
+                except Exception as exc:
+                    print(f"\nError processing case {case_idx+1}: {exc}")
+                    # Create an error result if the entire future fails
+                    completed_results[case_idx] = {
+                        "user_question": test_cases[case_idx].get("user_question", ""),
+                        "ground_truth": test_cases[case_idx].get("ground_truth", ""),
+                        "prediction": "Executor Error",
+                        "explanation": f"Error in executor: {str(exc)}",
+                        "case_type": "llm_error",
+                        "case_idx": case_idx + 1
+                    }
+                    suite_results["stats"]["llm_fail"] += 1
+                
+                # Update progress bar
+                pbar.update(1)
+                pbar.set_postfix({
+                    "Success": f"{suite_results['stats']['llm_successful']}/{total_cases}",
+                })
+    
+    # Add all results in correct order
+    suite_results["test_cases"] = completed_results
+    
     # Evaluate task success (comparing predictions with ground truth)
     suite_results = evaluate_test_results(suite_results)
     
@@ -144,7 +173,6 @@ def execute_test_cases(data, target_model_id, output_file=None):
         print(f"Results saved to {output_file}")
 
     return suite_results
-
 
 def run_evaluation(test_data, model_id, results_dir="results"):
     """
