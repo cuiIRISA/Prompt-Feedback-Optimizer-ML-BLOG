@@ -25,11 +25,12 @@ class PromptOptimizer:
         ${evaluation_results}
         </evaluation_results>
 
-        
+        IMPORTANT: If you need to identify errors between predictions and ground truth, focus on understanding the explanation part and critique any incorrect explanations with respect to the ground truth.
+
         Follow these thinking steps in order:
 
         1. STEP 1 - Error Pattern Analysis:
-           - List each misclassified case
+           - List ALL misclassified cases
            - Group similar errors
            - Focus on how the prompt's instructions led to these errors
 

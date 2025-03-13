@@ -19,7 +19,9 @@ class PromptRewriter:
         ${input_current_template}
         </current_template>
 
+
         Instructions for improved template:
+        ALWAYS KEEP THE PLACEHOLDER OF user_question
         1. Take the Current Template as a base. 
         2. Incorporate specific improvements identified in the analysis
         3. Ensure the new template maintains the basic structure but addresses the identified issues. 
