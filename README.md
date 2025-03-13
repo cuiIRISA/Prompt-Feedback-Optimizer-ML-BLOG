@@ -116,6 +116,3 @@ This framework is particularly effective for:
 - Enhancing content moderation and policy enforcement
 
 
-## License
-
-Distributed under the MIT License. See `LICENSE` for more information.
