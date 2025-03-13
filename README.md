@@ -15,8 +15,6 @@ Utilizes dedicated reasoning models to identify root causes and patterns in LLM 
 ✅ **Structured Improvement Cycle**  
 Implements a robust 5-stage process from task definition to continuous refinement
 
-✅ **Cloud Integration**  
-Seamlessly integrates with Amazon Bedrock, leveraging Amazon Nova for task execution and DeepSeek-R1 for error analysis
 
 ✅ **Modular Architecture**  
 Supports flexible integration with different LLMs and custom feedback mechanisms
